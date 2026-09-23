@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Результат платежа</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Результат платежа</h1>
+    <p>Итоговый статус: <span role="status" id="payment-status"></span></p>
+    <p id="payment-summary"></p>
+  </main>
+  <script>
+    const payment = JSON.parse(sessionStorage.getItem("demo_payment") || "null");
+    if (!payment || payment.status !== "success") {
+      location.replace("checkout.html");
+    } else {
+      document.querySelector("#payment-status").textContent = "Успешно";
+      document.querySelector("#payment-summary").textContent =
+        `${payment.payer}: ${payment.amount} ${payment.currency}`;
+    }
+  </script>
+</body>
+</html>

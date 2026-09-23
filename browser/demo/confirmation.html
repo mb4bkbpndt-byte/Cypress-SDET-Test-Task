@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Подтверждение платежа</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Подтверждение платежа</h1>
+    <dl>
+      <dt>Плательщик</dt><dd id="payer"></dd>
+      <dt>Сумма</dt><dd id="amount"></dd>
+      <dt>Карта</dt><dd id="card"></dd>
+    </dl>
+    <button id="confirm" type="button">Подтвердить оплату</button>
+  </main>
+  <script>
+    const payment = JSON.parse(sessionStorage.getItem("demo_payment") || "null");
+    if (!payment || payment.status !== "awaiting_confirmation") {
+      location.replace("checkout.html");
+    } else {
+      document.querySelector("#payer").textContent = payment.payer;
+      document.querySelector("#amount").textContent =
+        `${payment.amount} ${payment.currency}`;
+      document.querySelector("#card").textContent = `**** ${payment.cardLast4}`;
+      document.querySelector("#confirm").addEventListener("click", () => {
+        payment.status = "success";
+        sessionStorage.setItem("demo_payment", JSON.stringify(payment));
+        location.assign("result.html");
+      });
+    }
+  </script>
+</body>
+</html>

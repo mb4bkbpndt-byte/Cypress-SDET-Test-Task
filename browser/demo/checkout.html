@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Тестовая форма оплаты</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Тестовая форма оплаты</h1>
+    <p>Демонстрационный сценарий. Реальные платежи не выполняются.</p>
+    <form id="payment-form">
+      <label for="payer">Имя плательщика</label>
+      <input id="payer" name="payer" required autocomplete="name">
+
+      <label for="card">Номер тестовой карты</label>
+      <input id="card" name="card" required inputmode="numeric" pattern="[0-9]{16}"
+             maxlength="16" autocomplete="off">
+
+      <label for="amount">Сумма</label>
+      <input id="amount" name="amount" type="number" min="0.01" step="0.01"
+             required>
+
+      <label for="currency">Валюта</label>
+      <select id="currency" name="currency">
+        <option value="RUB">RUB</option>
+        <option value="USD">USD</option>
+      </select>
+
+      <button type="submit">Перейти к подтверждению</button>
+    </form>
+  </main>
+  <script>
+    document.querySelector("#payment-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const payment = {
+        payer: form.elements.namedItem("payer").value.trim(),
+        amount: form.elements.namedItem("amount").value,
+        currency: form.elements.namedItem("currency").value,
+        cardLast4: form.elements.namedItem("card").value.slice(-4),
+        status: "awaiting_confirmation"
+      };
+      sessionStorage.setItem("demo_payment", JSON.stringify(payment));
+      location.assign("confirmation.html");
+    });
+  </script>
+</body>
+</html>
